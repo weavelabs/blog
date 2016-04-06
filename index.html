@@ -1,0 +1,40 @@
+---
+layout: default
+---
+<header class="intro-header" style="background-image: url('{{ "/images/home-bg.jpg" | prepend: site.baseurl }}')">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1">
+        <div class="site-heading">
+          <h1>WeaveLabs Blog</h1>
+          <hr class="small">
+          <span class="subheading">Technology and interesting topics from Weave Labs</span>
+          <br />
+          <div class="home-txt">
+            <span class="small">Weave Labs is a technology consulting firm and development house located in the beautiful environs of Kerala, India. We have expertise in building solutions for the web and mobile devises, designing scalable architectures, building Android and iOS applications, and creating fast MVPs using Ruby on Rails, CodeIgnitor, Play, Spring and other modern web frameworks.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1">
+      {% for post in site.posts %}
+      <div class="post-preview">
+        <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">
+          <h2 class="post-title">
+                  {{ post.title }}
+              </h2>
+          <h3 class="post-subtitle">
+                  {{ post.subtitle }}
+              </h3>
+        </a>
+        <p class="post-meta">Posted by {{ post.author }} on {{ post.date | date: "%b %-d, %Y" }}</p>
+      </div>
+      <hr> {% endfor %}
+      <p class="rss-subscribe">Subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
+    </div>
+  </div>
+</div>

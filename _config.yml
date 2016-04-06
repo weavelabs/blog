@@ -1,0 +1,24 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+title: WeaveLabs Blog
+email: hello@weavelabs.com
+description: > # this means to ignore newlines until "baseurl:"
+  Weave Labs is a technology consulting firm and development house located in the beautiful
+  environs of Kerala, India. We have expertise in building solutions for the web and mobile devises,
+  designing scalable architectures, building Android and iOS applications, and creating fast MVPs
+  using Ruby on Rails, CodeIgnitor, Play, Spring and other modern web frameworks.
+baseurl: "/blog" # the subpath of your site, e.g. /blog
+url: "http://weavelabs.com" # the base hostname & protocol for your site
+twitter_username: weavelabs
+facebook_page: weavelabs
+linkedin_page: weavelabs
+github_username: weavelabs
+
+# Build settings
+markdown: kramdown
