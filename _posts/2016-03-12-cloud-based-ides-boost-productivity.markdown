@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Cloud-Based IDEs Boost Productivity"
-subtitle: Develope code faster in cloud based IDEs
+subtitle: Develop code faster in cloud based IDEs
 author: Charles Skariah
 date:   2016-03-12 12:08:37 +0530
 categories: technology cloud
