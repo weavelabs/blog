@@ -8,21 +8,21 @@ categories: technology cloud
 imageurl: heroku-vs-aws.jpg
 ---
 
-Reasons are many, to start with mainly PaaS(Platform as a Service) gives you an environment where you just push code and some basic configuration and get a running application, where in IaaS(Infrastructure as  a Service) it gives you components you need in order to build things on top of it.
+With the increase in the number of applications moving to the cloud, various providers have PaaS(Platform as a Service) and IaaS(Infrastructure as  a Service) offerings which are highly competitive in nature. Choosing one over the other would require a thorough analysis of your needs and the architecture of your application. We try to make the case of PaaS against IaaS in this article.
 
-To build a production server in AWS, a bulk of configurations needs to be done starting from web servers like Passenger/Unicorn and a Nginx front-end to handle the requests. Also you need to put additional effort for setting up a database like MySql or PostgreSQL. Finally you need to get help from deployment tools like Capistrano, Mina etc to handle the deployment.
+Why would one choose PaaS? Reasons are many, to start with, mainly, PaaS gives you an environment where you just push code and some basic configuration and get a running application, where in IaaS it gives you components you need in order to build things on top of it.
+
+To build a production server in AWS, a bulk of configurations needs to be done starting from web servers like Phusion Passenger / Unicorn and a Nginx front-end to handle the requests. Also you need to put additional effort for setting up a database like MySql or PostgreSQL. Finally you need to get help from deployment tools like Capistrano, Mina etc to handle the deployment.
 
 It’s really consumes a good amount of time for a newbie, where as in heroku you can make it with few lines of code and a git push - and everything works like magic!
 
 <h2>Speed</h2>
 
-Scaling is pretty much easy with Heroku. By using the web interface in Heroku, you can easily scale your dyno by just scrolling to the required numbers! Since we’ll all have scaling problem at some point of time, using Heroku’s architecture, one can easily find a solution for this without spending much time on it. The learning curve is almost close to zero, and anyone can get used to this in a matter of minutes.
-
-Coming to AWS, we need to have a set of configurations particularly for your application, to manage the workers and dynos matching.
+The good thing is Heroku is running on AWS instances in us-east and eu-west, which is pretty much comfortable for every deployment. So you get all the good things of AWS along with the speed of initial setup.
 
 <h2>Scaling</h2>
 
-Scaling is pretty much easy with Heroku. By using the web interface in Heroku, you can easily scale your dyno by just scrolling to the required numbers! Since we’ll all have scaling problem at some point of time, using Heroku’s architecture, one can easily find a solution for this without spending much time on it. The learning curve is almost close to zero, and anyone can get used to this in a matter of minutes.
+Scaling is pretty much easy with Heroku. By using the web interface in Heroku, you can easily scale your dyno by just scrolling to the required numbers! Since we assume that we'll have scaling problem at some point of time, using Heroku’s architecture, one can easily find a solution for this without spending much time on it. The learning curve is almost close to zero, and anyone can get used to this in a matter of minutes.
 
 
 Coming to AWS, we need to have a set of configurations particularly for your application, to manage the workers and dynos matching.
@@ -32,7 +32,7 @@ Coming to AWS, we need to have a set of configurations particularly for your app
 
 Regarding cost-efficiency, different people have different opinions. Right now Heroku is running $0.05/hr for a dyno, where as the price is almost half for an AWS micro instance.
 
-Also Heroku gives 512 MB of RAM in a dyno, so we can’t really compare the same with ec2 micro instance.The only question is, does it have the price of almost double? Also considering the time saved, I think it’s not ‘huge’ for small scale applications.
+Also Heroku gives 512 MB of RAM in a dyno, so we can’t really compare the same with ec2 micro instance. The only question is, does it have the price of almost double? Also considering the time saved, I think it’s not "huge" for small scale applications.
 
 <h2>Conclusion</h2>
 
@@ -49,4 +49,4 @@ Also right now developers deploy their code written in Node, Ruby, Java, PHP, Py
 
 
 
-*Disclaimer*: We just discussed only pros of heroku, there are a lot of cons including show stoppers for various applications, which we can discuss on future posts.
+**Disclaimer**: We just discussed only pros of heroku, there are a lot of cons including show stoppers for various applications, which we can discuss on future posts.
