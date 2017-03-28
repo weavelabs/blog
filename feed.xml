@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>WeaveLabs Blog</title>
+    <description>Weave Labs is a technology consulting firm and development house located in the beautiful environs of Kerala, India. We have expertise in building solutions for the web and mobile devises, designing scalable architectures, building Android and iOS applications, and creating fast MVPs using Ruby on Rails, CodeIgnitor, Play, Spring and other modern web frameworks.
+</description>
+    <link>https://weavelabs.com/blog/</link>
+    <atom:link href="https://weavelabs.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 28 Mar 2017 13:04:17 +0530</pubDate>
+    <lastBuildDate>Tue, 28 Mar 2017 13:04:17 +0530</lastBuildDate>
+    <generator>Jekyll v3.4.0</generator>
+    
+      <item>
+        <title>Why PaaS(Heroku) when there is IaaS(AWS)?</title>
+        <description>&lt;p&gt;With the increase in the number of applications moving to the cloud, various providers have PaaS(Platform as a Service) and IaaS(Infrastructure as  a Service) offerings which are highly competitive in nature. Choosing one over the other would require a thorough analysis of your needs and the architecture of your application. We try to make the case of PaaS against IaaS in this article.&lt;/p&gt;
+
+&lt;p&gt;Why would one choose PaaS? Reasons are many, to start with, mainly, PaaS gives you an environment where you just push code and some basic configuration and get a running application, where in IaaS it gives you components you need in order to build things on top of it.&lt;/p&gt;
+
+&lt;p&gt;To build a production server in AWS, a bulk of configurations needs to be done starting from web servers like Phusion Passenger / Unicorn and a Nginx front-end to handle the requests. Also you need to put additional effort for setting up a database like MySql or PostgreSQL. Finally you need to get help from deployment tools like Capistrano, Mina etc to handle the deployment.&lt;/p&gt;
+
+&lt;p&gt;It’s really consumes a good amount of time for a newbie, where as in heroku you can make it with few lines of code and a git push - and everything works like magic!&lt;/p&gt;
+
+&lt;h2&gt;Speed&lt;/h2&gt;
+
+&lt;p&gt;The good thing is Heroku is running on AWS instances in us-east and eu-west, which is pretty much comfortable for every deployment. So you get all the good things of AWS along with the speed of initial setup.&lt;/p&gt;
+
+&lt;h2&gt;Scaling&lt;/h2&gt;
+
+&lt;p&gt;Scaling is pretty much easy with Heroku. By using the web interface in Heroku, you can easily scale your dyno by just scrolling to the required numbers! Since we assume that we’ll have scaling problem at some point of time, using Heroku’s architecture, one can easily find a solution for this without spending much time on it. The learning curve is almost close to zero, and anyone can get used to this in a matter of minutes.&lt;/p&gt;
+
+&lt;p&gt;Coming to AWS, we need to have a set of configurations particularly for your application, to manage the workers and dynos matching.&lt;/p&gt;
+
+&lt;h2&gt;Cost Efficiency&lt;/h2&gt;
+
+&lt;p&gt;Regarding cost-efficiency, different people have different opinions. Right now Heroku is running $0.05/hr for a dyno, where as the price is almost half for an AWS micro instance.&lt;/p&gt;
+
+&lt;p&gt;Also Heroku gives 512 MB of RAM in a dyno, so we can’t really compare the same with ec2 micro instance. The only question is, does it have the price of almost double? Also considering the time saved, I think it’s not “huge” for small scale applications.&lt;/p&gt;
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;What Heroku offers for web developers is instant deployment, fast &amp;amp; easy scaling, and vast tool selection. Now we can concentrate on building our applications and forget the tedious deployment and server administration tasks that used to strangle our productivity. We can deploy fast, scale quickly, and adjust to circumstance as needs arise. The game is changing, and Heroku (and others like them) are changing it.&lt;/p&gt;
+
+&lt;p&gt;We love Heroku for “quick deployments”. When we start an application, and we want some cheap hosting (the Heroku free tier is awesome - essentially if you only need one web dyno and 5MB of PostgreSQL, it’s free to host an application), Heroku is the  go-to place. For “serious” production deployments with several paying customers, and a service-level-agreement, with dedicated time to spend on deployment etc, we can’t quite bring ourself to offload much control to Heroku, and then either AWS or our own servers have been the hosting platform of choice.&lt;/p&gt;
+
+&lt;p&gt;Ultimately, it’s about what works best for you. For “a beginner programmer” - it might just be that using Heroku will let you focus on writing Ruby, and not have to spend time getting all the other infrastructure around your code built up.&lt;/p&gt;
+
+&lt;p&gt;Also right now developers deploy their code written in Node, Ruby, Java, PHP, Python, Go, Scala, or Clojure to a build system which produces an app that’s ready for execution.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Disclaimer&lt;/strong&gt;: We just discussed only pros of heroku, there are a lot of cons including show stoppers for various applications, which we can discuss on future posts.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 24 May 2016 20:08:37 +0530</pubDate>
+        <link>https://weavelabs.com/blog/technology/cloud/2016/05/24/paas-vs-iaas.html</link>
+        <guid isPermaLink="true">https://weavelabs.com/blog/technology/cloud/2016/05/24/paas-vs-iaas.html</guid>
+        
+        
+        <category>technology</category>
+        
+        <category>cloud</category>
+        
+      </item>
+    
+      <item>
+        <title>Cloud-Based IDEs Boost Productivity</title>
+        <description>&lt;p&gt;Today, thanks to cloud computing, most people have instant access to information, tools and applications that can help them perform their corporate and personal tasks better.&lt;/p&gt;
+
+&lt;p&gt;That’s not the case, however, on the development side: Nearly 15 million developers and software companies use traditional development environment, with all of the limitations that come with operating systems for developing applications and software. They code, compile and debug applications while sitting in front of a system that supports the given development environment or IDE.&lt;/p&gt;
+
+&lt;h2&gt;Problems with OS and desktop-based IDEs&lt;/h2&gt;
+
+&lt;p&gt;In today’s agile market, developers have to keep up with the coding, compiling and debugging activities, and release software/applications by a given deadline. Desktop/OS-specific IDEs can impede the development process and potentially cause missed deadlines; because they do not give developers the flexibility and autonomy to work anytime from anywhere.&lt;/p&gt;
+
+&lt;p&gt;OS / desktop-based IDEs can also be a problem when an application or software program is a joint effort of many developers - amendments and the management of releases is difficult because different developers have worked in their system-specific IDEs.&lt;/p&gt;
+
+&lt;p&gt;It’s imperative in fast-paced, competitive business environments for developers to find a coding environment that is free from the challenges of specific OSes and machines&lt;/p&gt;
+
+&lt;h2&gt;Advantages of working in cloud-based IDEs&lt;/h2&gt;
+
+&lt;p&gt;Using an online or cloud-based development environment unlocks the following benefits for software developers and software development companies, boosting productivity and Return of Investment(ROI)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Programming workspace is a single and centralized environment in which multiple people can co-build, co-edit and co-debug.&lt;/li&gt;
+  &lt;li&gt;Easy and instant access to code and libraries through the web.&lt;/li&gt;
+  &lt;li&gt;Enables developers to work on the go without the need to occupy systems with loads of heavy code and data.&lt;/li&gt;
+  &lt;li&gt;Accessible through all devices and browsers.&lt;/li&gt;
+  &lt;li&gt;Facilitates better collaboration among developers located at different locations.&lt;/li&gt;
+  &lt;li&gt;Reduces duplication of work&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There are several cloud-based IDEs available that can take your coding and application programming task to the next level.&lt;/p&gt;
+
+&lt;p&gt;One of the best, among the list is Cloud9, which has a free user plan, enough for professional developers. In the free plan you will have one free private workspace and unlimited public workspaces. Also there are paid plans starting from $19/month, which provide unlimited free private workspaces.&lt;/p&gt;
+
+&lt;p&gt;Regarding usability, it’s pretty fast to handle most of the regular development tasks like as in our local environment with a console. Cloud9 combines a powerful online code editor with a full Ubuntu workspace in the cloud. It supports more than 40 languages, with class A support for PHP, Ruby, Python, JavaScript, Go, which helps in building WordPress, Django and Rails websites and test in 300+ browser/OS combinations.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 12 Mar 2016 12:08:37 +0530</pubDate>
+        <link>https://weavelabs.com/blog/technology/cloud/2016/03/12/cloud-based-ides-boost-productivity.html</link>
+        <guid isPermaLink="true">https://weavelabs.com/blog/technology/cloud/2016/03/12/cloud-based-ides-boost-productivity.html</guid>
+        
+        
+        <category>technology</category>
+        
+        <category>cloud</category>
+        
+      </item>
+    
+      <item>
+        <title>Performance Testing Rails Applications</title>
+        <description>&lt;p&gt;Measuring the performance of a rails application is very important before it is deployed to production. Rails framework provides various tools to measure the performance of the application.&lt;/p&gt;
+
+&lt;p&gt;Performance tests are typically integration tests that helps identify the application’s memory and speed issues.&lt;/p&gt;
+
+&lt;!--more--&gt;
+&lt;h2&gt;Setting Up&lt;/h2&gt;
+
+&lt;p&gt;You can use the rails-perftest gem to benchmark and profile rails code.
+Include the following gems in your project’s Gemfile&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gem 'rails-perftest'
+gem 'ruby-prof' # for MRI profiling
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2&gt;Writing performance test cases&lt;/h2&gt;
+
+&lt;p&gt;As mentioned before performance tests are special integration tests in the rails application.
+Assume that you would want to test the dashboard of your application which has the following code:&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;c1&quot;&gt;# app/controllers/dashboard_controller.rb&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# accessible via route /dashboard&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DashboardController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;show&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@comment_list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;commentable_id IN (?) AND commentable_type = ?  AND commented_by != ? AND description != ? and visible = true&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;completed_evaluations_id&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'EvaluationInstance'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;current_employee&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;order&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'created_at desc'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;limit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This dashboard action gets the latest feedback of given to the user in the form of comments. The performance test for this action can be something like the following:&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'test_helper'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'rails/performance_test_help'&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;PostPerformanceTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ActionDispatch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;PerformanceTest&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setup&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;login_as&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:employee&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+  &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Access Dashboard&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;gte&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/dashboard'&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;The performance test will provide details like the time take for the action, the number of objects created and total memory used for this.&lt;/p&gt;
+
+&lt;p&gt;Similary a model performance test can be used to give an idea on the time required for a function. This can come in handy while running complex queries against the database.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+  &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;slow method&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;FactoryGirl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;slow_method&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2&gt;Running performance tests&lt;/h2&gt;
+
+&lt;p&gt;Performance tests can be run in two modes - benchmarking and profiling modes.&lt;/p&gt;
+
+&lt;p&gt;Benchmarking makes it easy to quickly gather a few metrics about each test run. Each test case is run multiple times( by default 4 times) in benchmarking mode.&lt;/p&gt;
+
+&lt;p&gt;Performance test can be run in benchmarking mode using&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;rake &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;:benchmark
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Profiling does an in-depth analysis using an external profiler. For MRI this is done using RubyProf. Here each test case is run only once.&lt;/p&gt;
+
+&lt;p&gt;Profiling can be done using:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;rake &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;:profile
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Benchmarking and profiling gives multiple metrics as results including various time, memory and garbage collection metrics. More details can be found &lt;a href=&quot;https://github.com/rails/rails-perftest#metrics&quot;&gt;in this readme page&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Command line tools&lt;/h2&gt;
+
+&lt;p&gt;For quick and dirty performance testing(without writing performance test files), this also provides command line tools &lt;code class=&quot;highlighter-rouge&quot;&gt;benchmarker&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;profiler&lt;/code&gt;. Each of this command can be run by passing a snippet of code to it.&lt;/p&gt;
+
+&lt;p&gt;An example run could be as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;perftest benchmarker &lt;span class=&quot;s1&quot;&gt;'Comment.all'&lt;/span&gt; --runs 3 --metrics wall_time,memory
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Performance tests are a useful tools to measure, benchmark and profile blocks of code in your rails applicaton. A well written performance test can help a developer to analyse the most time taking parts of the key execution paths in the application.&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 15 Oct 2015 18:32:00 +0530</pubDate>
+        <link>https://weavelabs.com/blog/technology/rails/2015/10/15/performance-testing-rails-applications.html</link>
+        <guid isPermaLink="true">https://weavelabs.com/blog/technology/rails/2015/10/15/performance-testing-rails-applications.html</guid>
+        
+        
+        <category>technology</category>
+        
+        <category>rails</category>
+        
+      </item>
+    
+  </channel>
+</rss>
