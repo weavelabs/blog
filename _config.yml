@@ -14,7 +14,7 @@ description: > # this means to ignore newlines until "baseurl:"
   designing scalable architectures, building Android and iOS applications, and creating fast MVPs
   using Ruby on Rails, CodeIgnitor, Play, Spring and other modern web frameworks.
 baseurl: "/blog" # the subpath of your site, e.g. /blog
-url: "http://weavelabs.com" # the base hostname & protocol for your site
+url: "https://weavelabs.com" # the base hostname & protocol for your site
 twitter_username: weavelabs
 facebook_page: weavelabs
 linkedin_page: weavelabs
