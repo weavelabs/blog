@@ -6,9 +6,72 @@
 </description>
     <link>https://weavelabs.com/blog/</link>
     <atom:link href="https://weavelabs.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 28 Mar 2017 15:28:05 +0530</pubDate>
-    <lastBuildDate>Tue, 28 Mar 2017 15:28:05 +0530</lastBuildDate>
-    <generator>Jekyll v3.4.0</generator>
+    <pubDate>Mon, 15 Jan 2018 17:44:37 +0530</pubDate>
+    <lastBuildDate>Mon, 15 Jan 2018 17:44:37 +0530</lastBuildDate>
+    <generator>Jekyll v3.6.2</generator>
+    
+      <item>
+        <title>Delayed Job as a rake task</title>
+        <description>&lt;p&gt;Delayed Job is a great and simple edition to background jobs in a Rails application. But if you don’t have the memory or resources to run a background thread 24hrs on a server what do you do?&lt;/p&gt;
+
+&lt;!--more--&gt;
+&lt;p&gt;We were in a similar situation for a client, who was strictly on a shoe string budget, running off Heroku.
+The background job was to process some applications, verify and sent emails if they had errors. This was to be done once a day. Running a background job just for this was a bad choice.&lt;/p&gt;
+
+&lt;p&gt;Another option was to run this as a rake task, at a set time, use &lt;a href=&quot;https://elements.heroku.com/addons/scheduler&quot;&gt;Heroku Scheduler&lt;/a&gt; to run this at 04:00am every day. But we wanted to try a bit more generic solution.&lt;/p&gt;
+
+&lt;p&gt;We decided to stick to write Delayed Job classes, so that in future, it can serve 2 purposes&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;For more background processing, more jobs we just have to write new classes with &lt;code class=&quot;highlighter-rouge&quot;&gt;perform&lt;/code&gt; methods&lt;/li&gt;
+  &lt;li&gt;When the app is moved into it’s own private hosting VPS, run a background thread more often, to scale it.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;So delayed job it was!&lt;/p&gt;
+
+&lt;p&gt;But in the current setup, we had to run the jobs as a rake task, triggered once a day at a specific time, while leaving room for a full fledged background process in the future.&lt;/p&gt;
+
+&lt;p&gt;Looking at the &lt;a href=&quot;https://github.com/collectiveidea/delayed_job&quot;&gt;delayed_job source at Github&lt;/a&gt; we figured that this could be easily implemented. It internally creates a &lt;code class=&quot;highlighter-rouge&quot;&gt;Delayed::Worker&lt;/code&gt; class and works off all the jobs in the &lt;code class=&quot;highlighter-rouge&quot;&gt;delayed_jobs&lt;/code&gt; table.&lt;/p&gt;
+
+&lt;p&gt;The solution was really simple.
+Create a rake task in &lt;code class=&quot;highlighter-rouge&quot;&gt;lib/tasks/delayed_job.rake&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# File lib/tasks/delayed_job.rake&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:delayed_job&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;desc&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Run Delayed job worker'&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;task&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;work: :environment&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;worker&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Delayed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Worker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;worker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;work_off&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#by default runs 100 rows&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;For more information on the sources:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;The rake task for starting delayed job - &lt;a href=&quot;https://github.com/collectiveidea/delayed_job/blob/c7a42fb78dc538de46024eb36b31e72916ff21a0/lib/delayed/tasks.rb#L8&quot;&gt;delayed/tasks.rb&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The Delayed::Worker start - &lt;a href=&quot;https://github.com/collectiveidea/delayed_job/blob/c7a42fb78dc538de46024eb36b31e72916ff21a0/lib/delayed/worker.rb#L156&quot;&gt;delayed/worker.rb&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Delayed::Worker work_off definition - &lt;a href=&quot;https://github.com/collectiveidea/delayed_job/blob/c7a42fb78dc538de46024eb36b31e72916ff21a0/lib/delayed/worker.rb#L206&quot;&gt;delayed/worker.rb#work_off&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Mon, 15 Jan 2018 17:32:00 +0530</pubDate>
+        <link>https://weavelabs.com/blog/technology/rails/2018/01/15/delayed-job-as-a-rake-task.html</link>
+        <guid isPermaLink="true">https://weavelabs.com/blog/technology/rails/2018/01/15/delayed-job-as-a-rake-task.html</guid>
+        
+        
+        <category>technology</category>
+        
+        <category>rails</category>
+        
+      </item>
     
       <item>
         <title>Why PaaS(Heroku) when there is IaaS(AWS)?</title>
@@ -115,18 +178,17 @@
 &lt;p&gt;You can use the rails-perftest gem to benchmark and profile rails code.
 Include the following gems in your project’s Gemfile&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gem 'rails-perftest'
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gem 'rails-perftest'
 gem 'ruby-prof' # for MRI profiling
 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2&gt;Writing performance test cases&lt;/h2&gt;
 
 &lt;p&gt;As mentioned before performance tests are special integration tests in the rails application.
 Assume that you would want to test the dashboard of your application which has the following code:&lt;/p&gt;
 
-&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
 &lt;span class=&quot;c1&quot;&gt;# app/controllers/dashboard_controller.rb&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;# accessible via route /dashboard&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DashboardController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
@@ -135,11 +197,10 @@ Assume that you would want to test the dashboard of your application which has t
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;This dashboard action gets the latest feedback of given to the user in the form of comments. The performance test for this action can be something like the following:&lt;/p&gt;
 
-&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
 &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'test_helper'&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'rails/performance_test_help'&lt;/span&gt;
 
@@ -153,20 +214,18 @@ Assume that you would want to test the dashboard of your application which has t
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;The performance test will provide details like the time take for the action, the number of objects created and total memory used for this.&lt;/p&gt;
 
 &lt;p&gt;Similary a model performance test can be used to give an idea on the time required for a function. This can come in handy while running complex queries against the database.&lt;/p&gt;
 
-&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
   &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;slow method&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;FactoryGirl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;slow_method&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2&gt;Running performance tests&lt;/h2&gt;
 
@@ -176,19 +235,17 @@ Assume that you would want to test the dashboard of your application which has t
 
 &lt;p&gt;Performance test can be run in benchmarking mode using&lt;/p&gt;
 
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;rake &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;:benchmark
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rake &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;:benchmark
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Profiling does an in-depth analysis using an external profiler. For MRI this is done using RubyProf. Here each test case is run only once.&lt;/p&gt;
 
 &lt;p&gt;Profiling can be done using:&lt;/p&gt;
 
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;rake &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;:profile
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rake &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;:profile
 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Benchmarking and profiling gives multiple metrics as results including various time, memory and garbage collection metrics. More details can be found &lt;a href=&quot;https://github.com/rails/rails-perftest#metrics&quot;&gt;in this readme page&lt;/a&gt;&lt;/p&gt;
 
@@ -198,9 +255,8 @@ Assume that you would want to test the dashboard of your application which has t
 
 &lt;p&gt;An example run could be as follows:&lt;/p&gt;
 
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;perftest benchmarker &lt;span class=&quot;s1&quot;&gt;'Comment.all'&lt;/span&gt; --runs 3 --metrics wall_time,memory
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;perftest benchmarker &lt;span class=&quot;s1&quot;&gt;'Comment.all'&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--runs&lt;/span&gt; 3 &lt;span class=&quot;nt&quot;&gt;--metrics&lt;/span&gt; wall_time,memory
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Performance tests are a useful tools to measure, benchmark and profile blocks of code in your rails applicaton. A well written performance test can help a developer to analyse the most time taking parts of the key execution paths in the application.&lt;/p&gt;
 

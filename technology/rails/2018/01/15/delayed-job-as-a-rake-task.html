@@ -6,14 +6,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Performance Testing Rails Applications</title>
-  <meta name="description" content="Measuring the performance of a rails application is very important before it is deployed to production. Rails framework provides various tools to measure the...">
+  <title>Delayed Job as a rake task</title>
+  <meta name="description" content="Delayed Job is a great and simple edition to background jobs in a Rails application. But if you don’t have the memory or resources to run a background thread...">
 
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800|Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
   <link rel="stylesheet" href="/blog/css/main.css">
-  <link rel="canonical" href="https://weavelabs.com/blog/technology/rails/2015/10/15/performance-testing-rails-applications.html">
+  <link rel="canonical" href="https://weavelabs.com/blog/technology/rails/2018/01/15/delayed-job-as-a-rake-task.html">
   <link rel="alternate" type="application/rss+xml" title="WeaveLabs Blog" href="https://weavelabs.com/blog/feed.xml">
   <link rel="shortcut icon" href="/favicon.png">
 
@@ -82,10 +82,10 @@
     <div class="row">
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1">
         <div class="post-heading">
-          <h1>Performance Testing Rails Applications</h1>
-          <h2 class="subheading">Tools to measure the performance of a rails application</h2>
+          <h1>Delayed Job as a rake task</h1>
+          <h2 class="subheading">Running delayed job on-demand with a rake task and Heroku Scheduler</h2>
           <span class="meta">Posted by  • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">Awin Abi</span></span> on
-          <time datetime="2015-10-15T18:32:00+05:30" itemprop="datePublished">Oct 15, 2015</time>
+          <time datetime="2018-01-15T17:32:00+05:30" itemprop="datePublished">Jan 15, 2018</time>
           </span>
         </div>
       </div>
@@ -97,98 +97,55 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1">
-        <p>Measuring the performance of a rails application is very important before it is deployed to production. Rails framework provides various tools to measure the performance of the application.</p>
-
-<p>Performance tests are typically integration tests that helps identify the application’s memory and speed issues.</p>
+        <p>Delayed Job is a great and simple edition to background jobs in a Rails application. But if you don’t have the memory or resources to run a background thread 24hrs on a server what do you do?</p>
 
 <!--more-->
-<h2>Setting Up</h2>
+<p>We were in a similar situation for a client, who was strictly on a shoe string budget, running off Heroku.
+The background job was to process some applications, verify and sent emails if they had errors. This was to be done once a day. Running a background job just for this was a bad choice.</p>
 
-<p>You can use the rails-perftest gem to benchmark and profile rails code.
-Include the following gems in your project’s Gemfile</p>
+<p>Another option was to run this as a rake task, at a set time, use <a href="https://elements.heroku.com/addons/scheduler">Heroku Scheduler</a> to run this at 04:00am every day. But we wanted to try a bit more generic solution.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem 'rails-perftest'
-gem 'ruby-prof' # for MRI profiling
+<p>We decided to stick to write Delayed Job classes, so that in future, it can serve 2 purposes</p>
 
-</code></pre></div></div>
+<ol>
+  <li>For more background processing, more jobs we just have to write new classes with <code class="highlighter-rouge">perform</code> methods</li>
+  <li>When the app is moved into it’s own private hosting VPS, run a background thread more often, to scale it.</li>
+</ol>
 
-<h2>Writing performance test cases</h2>
+<p>So delayed job it was!</p>
 
-<p>As mentioned before performance tests are special integration tests in the rails application.
-Assume that you would want to test the dashboard of your application which has the following code:</p>
+<p>But in the current setup, we had to run the jobs as a rake task, triggered once a day at a specific time, while leaving room for a full fledged background process in the future.</p>
 
-<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="c1"># app/controllers/dashboard_controller.rb</span>
-<span class="c1"># accessible via route /dashboard</span>
-<span class="k">class</span> <span class="nc">DashboardController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-  <span class="k">def</span> <span class="nf">show</span>
-    <span class="vi">@comment_list</span> <span class="o">=</span> <span class="no">Comment</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="s2">"commentable_id IN (?) AND commentable_type = ?  AND commented_by != ? AND description != ? and visible = true"</span><span class="p">,</span> <span class="n">completed_evaluations_id</span> <span class="p">,</span><span class="s1">'EvaluationInstance'</span><span class="p">,</span><span class="n">current_employee</span><span class="p">.</span><span class="nf">id</span><span class="p">,</span><span class="s2">""</span><span class="p">).</span><span class="nf">order</span><span class="p">(</span><span class="s1">'created_at desc'</span><span class="p">).</span><span class="nf">limit</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<p>Looking at the <a href="https://github.com/collectiveidea/delayed_job">delayed_job source at Github</a> we figured that this could be easily implemented. It internally creates a <code class="highlighter-rouge">Delayed::Worker</code> class and works off all the jobs in the <code class="highlighter-rouge">delayed_jobs</code> table.</p>
+
+<p>The solution was really simple.
+Create a rake task in <code class="highlighter-rouge">lib/tasks/delayed_job.rake</code></p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># File lib/tasks/delayed_job.rake</span>
+
+<span class="n">namespace</span> <span class="ss">:delayed_job</span> <span class="k">do</span>
+  <span class="n">desc</span> <span class="s1">'Run Delayed job worker'</span>
+  <span class="n">task</span> <span class="ss">work: :environment</span> <span class="k">do</span>
+    <span class="n">worker</span> <span class="o">=</span> <span class="no">Delayed</span><span class="o">::</span><span class="no">Worker</span><span class="p">.</span><span class="nf">new</span>
+    <span class="n">worker</span><span class="p">.</span><span class="nf">work_off</span> <span class="c1">#by default runs 100 rows</span>
   <span class="k">end</span>
 <span class="k">end</span>
 
 </code></pre></div></div>
-<p>This dashboard action gets the latest feedback of given to the user in the form of comments. The performance test for this action can be something like the following:</p>
 
-<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="nb">require</span> <span class="s1">'test_helper'</span>
-<span class="nb">require</span> <span class="s1">'rails/performance_test_help'</span>
+<p><strong>For more information on the sources:</strong></p>
 
-<span class="k">class</span> <span class="nc">PostPerformanceTest</span> <span class="o">&lt;</span> <span class="no">ActionDispatch</span><span class="o">::</span><span class="no">PerformanceTest</span>
-  <span class="k">def</span> <span class="nf">setup</span>
-    <span class="n">login_as</span><span class="p">(</span><span class="ss">:employee</span><span class="p">)</span>
-  <span class="k">end</span>
-
-  <span class="nb">test</span> <span class="s2">"Access Dashboard"</span> <span class="k">do</span>
-    <span class="n">gte</span> <span class="s1">'/dashboard'</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-</code></pre></div></div>
-<p>The performance test will provide details like the time take for the action, the number of objects created and total memory used for this.</p>
-
-<p>Similary a model performance test can be used to give an idea on the time required for a function. This can come in handy while running complex queries against the database.</p>
-
-<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-  <span class="nb">test</span> <span class="s2">"slow method"</span> <span class="k">do</span>
-    <span class="n">comment</span> <span class="o">=</span> <span class="no">FactoryGirl</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="ss">:comment</span><span class="p">)</span>
-    <span class="n">comment</span><span class="p">.</span><span class="nf">slow_method</span>
-  <span class="k">end</span>
-
-</code></pre></div></div>
-
-<h2>Running performance tests</h2>
-
-<p>Performance tests can be run in two modes - benchmarking and profiling modes.</p>
-
-<p>Benchmarking makes it easy to quickly gather a few metrics about each test run. Each test case is run multiple times( by default 4 times) in benchmarking mode.</p>
-
-<p>Performance test can be run in benchmarking mode using</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>rake <span class="nb">test</span>:benchmark
-</code></pre></div></div>
-
-<p>Profiling does an in-depth analysis using an external profiler. For MRI this is done using RubyProf. Here each test case is run only once.</p>
-
-<p>Profiling can be done using:</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="nv">$ </span>rake <span class="nb">test</span>:profile
-
-</code></pre></div></div>
-
-<p>Benchmarking and profiling gives multiple metrics as results including various time, memory and garbage collection metrics. More details can be found <a href="https://github.com/rails/rails-perftest#metrics">in this readme page</a></p>
-
-<h2>Command line tools</h2>
-
-<p>For quick and dirty performance testing(without writing performance test files), this also provides command line tools <code class="highlighter-rouge">benchmarker</code> and <code class="highlighter-rouge">profiler</code>. Each of this command can be run by passing a snippet of code to it.</p>
-
-<p>An example run could be as follows:</p>
-
-<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>perftest benchmarker <span class="s1">'Comment.all'</span> <span class="nt">--runs</span> 3 <span class="nt">--metrics</span> wall_time,memory
-</code></pre></div></div>
-
-<p>Performance tests are a useful tools to measure, benchmark and profile blocks of code in your rails applicaton. A well written performance test can help a developer to analyse the most time taking parts of the key execution paths in the application.</p>
-
+<ul>
+  <li>
+    <p>The rake task for starting delayed job - <a href="https://github.com/collectiveidea/delayed_job/blob/c7a42fb78dc538de46024eb36b31e72916ff21a0/lib/delayed/tasks.rb#L8">delayed/tasks.rb</a></p>
+  </li>
+  <li>
+    <p>The Delayed::Worker start - <a href="https://github.com/collectiveidea/delayed_job/blob/c7a42fb78dc538de46024eb36b31e72916ff21a0/lib/delayed/worker.rb#L156">delayed/worker.rb</a></p>
+  </li>
+  <li>
+    <p>Delayed::Worker work_off definition - <a href="https://github.com/collectiveidea/delayed_job/blob/c7a42fb78dc538de46024eb36b31e72916ff21a0/lib/delayed/worker.rb#L206">delayed/worker.rb#work_off</a></p>
+  </li>
+</ul>
 
       </div>
     </div>
